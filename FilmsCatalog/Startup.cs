@@ -13,6 +13,10 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using AutoMapper;
+using FilmsCatalog.Data.Repositories;
+using FilmsCatalog.Data.Repositories.Interfaces;
+using FilmsCatalog.Mapper;
 
 namespace FilmsCatalog
 {
@@ -28,10 +32,14 @@ namespace FilmsCatalog
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            string connectionString = Configuration.GetConnectionString("DefaultConnection");
-            services.AddDbContext<ApplicationDbContext>(options => options.UseSqlServer(connectionString));
+            services.AddDbContext<ApplicationDbContext>(options => options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));
             services.AddIdentity<User, IdentityRole>()
                 .AddEntityFrameworkStores<ApplicationDbContext>();
+            services.ConfigureApplicationCookie(opt => opt.LoginPath = "/Account/SignIn");
+         
+            var mapper = new MapperConfiguration(mc => mc.AddProfile(new MappingProfile())).CreateMapper();
+            services.AddSingleton(mapper);
+            services.AddTransient<IFilmRepository, FilmRepository>();
 
             services.AddDatabaseDeveloperPageExceptionFilter();            
             services.AddControllersWithViews();

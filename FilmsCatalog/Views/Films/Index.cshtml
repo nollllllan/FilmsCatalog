@@ -1,0 +1,63 @@
+﻿@using Microsoft.AspNetCore.Identity
+@using X.PagedList.Mvc.Core
+@using X.PagedList
+
+@model IEnumerable<FilmsCatalog.Models.ViewModels.Film.FilmsViewModel>
+@inject UserManager<User> UserManager
+@{
+    ViewData["Title"] = "Фильмы";
+}
+
+<h1>Список фильмов</h1>
+
+<p>
+    <a class="btn-block " asp-action="Create">Создать</a>
+</p>
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                Наименование
+            </th>
+            <th>
+                Режиссер
+            </th>
+            <th>
+                Год
+            </th>
+            <th>
+                Пользователь
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in ViewBag.OnePageOfFilms)
+        {
+            <tr>
+                <td>
+                    @item.Name
+                </td>
+                <td>
+                    @item.ProducerSecondName
+                </td>
+                <td>
+                    @item.Year
+                </td>
+                <td>
+                    @item.UserFullName
+                </td>
+                <td>
+                    @if (item.UserId == UserManager.GetUserId(User))
+                    {
+                        <a asp-action="Edit" asp-route-id="@item.Id">Редактировать</a> <text>|</text>
+                    }
+                    <a asp-action="Details" asp-route-id="@item.Id">Детали</a> |
+                    <a asp-action="Delete" asp-route-id="@item.Id">Удалить</a>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+
+@Html.PagedListPager((IPagedList)ViewBag.OnePageOfFilms, page => Url.Action("Index", new { page }))

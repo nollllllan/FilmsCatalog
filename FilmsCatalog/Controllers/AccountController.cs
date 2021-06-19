@@ -1,9 +1,10 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using FilmsCatalog.Models;
+using FilmsCatalog.Models.ViewModels;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Logging;
 using System;
 using System.Threading.Tasks;
-using FilmsCatalog.Models;
-using Microsoft.AspNetCore.Identity;
-using Microsoft.Extensions.Logging;
 
 namespace FilmsCatalog.Controllers
 {
